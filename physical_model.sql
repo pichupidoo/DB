@@ -1,4 +1,3 @@
--- 01_physical_model.sql
 -- Физическая модель базы данных для спортивного центра
 
 -- Удаляем таблицы если существуют (для повторных запусков)
@@ -32,7 +31,7 @@ CREATE TABLE Clients (
     birth_date DATE NOT NULL,
     gender VARCHAR(20) CHECK (gender IN ('м','ж','другое')),
     phone VARCHAR(20) UNIQUE NOT NULL,
-    subscription_id INT REFERENCES Subscriptions(subscription_id)
+    subscription_id INT REFERENCES Subscriptions(subscription_id) ON DELETE CASCADE
 );
 
 -- =============================
@@ -50,8 +49,8 @@ CREATE TABLE Staff (
 -- =============================
 CREATE TABLE Payments (
     payment_id SERIAL PRIMARY KEY,
-    client_id INT NOT NULL REFERENCES Clients(client_id),
-    subscription_id INT NOT NULL REFERENCES Subscriptions(subscription_id),
+    client_id INT NOT NULL REFERENCES Clients(client_id) ON DELETE CASCADE,
+    subscription_id INT NOT NULL REFERENCES Subscriptions(subscription_id) ON DELETE CASCADE,
     amount NUMERIC(10,2) NOT NULL CHECK (amount >= 0),
     payment_date DATE NOT NULL DEFAULT CURRENT_DATE,
     method VARCHAR(50) NOT NULL CHECK (method IN ('карта','наличные','онлайн'))
@@ -81,8 +80,8 @@ CREATE TABLE Equipment (
 CREATE TABLE Workouts (
     workout_id SERIAL PRIMARY KEY,
     datetime TIMESTAMP NOT NULL,
-    hall_id INT NOT NULL REFERENCES Halls(hall_id),
-    trainer_id INT NOT NULL REFERENCES Staff(staff_id)
+    hall_id INT NOT NULL REFERENCES Halls(hall_id) ON DELETE CASCADE,
+    trainer_id INT NOT NULL REFERENCES Staff(staff_id) ON DELETE CASCADE
 );
 
 -- =============================
@@ -90,8 +89,8 @@ CREATE TABLE Workouts (
 -- =============================
 CREATE TABLE Bookings (
     booking_id SERIAL PRIMARY KEY,
-    client_id INT NOT NULL REFERENCES Clients(client_id),
-    class_id INT NOT NULL REFERENCES Workouts(workout_id),
+    client_id INT NOT NULL REFERENCES Clients(client_id) ON DELETE CASCADE,
+    class_id INT NOT NULL REFERENCES Workouts(workout_id) ON DELETE CASCADE,
     status VARCHAR(20) NOT NULL CHECK (status IN ('записан','отменил','посетил'))
 );
 
@@ -101,7 +100,7 @@ CREATE TABLE Bookings (
 CREATE TABLE Sections (
     section_id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
-    trainer_id INT NOT NULL REFERENCES Staff(staff_id)
+    trainer_id INT NOT NULL REFERENCES Staff(staff_id) ON DELETE CASCADE
 );
 
 -- =============================
@@ -111,7 +110,7 @@ CREATE TABLE Services (
     service_id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     price NUMERIC(10,2) NOT NULL CHECK (price >= 0),
-    staff_id INT NOT NULL REFERENCES Staff(staff_id)
+    staff_id INT NOT NULL REFERENCES Staff(staff_id) ON DELETE CASCADE
 );
 
 -- =============================
@@ -119,7 +118,7 @@ CREATE TABLE Services (
 -- =============================
 CREATE TABLE Reviews (
     review_id SERIAL PRIMARY KEY,
-    client_id INT NOT NULL REFERENCES Clients(client_id),
+    client_id INT NOT NULL REFERENCES Clients(client_id) ON DELETE CASCADE,
     target_type VARCHAR(20) NOT NULL CHECK (target_type IN ('занятие','услуга')),
     rating INT NOT NULL CHECK (rating BETWEEN 1 AND 5),
     comment TEXT,
