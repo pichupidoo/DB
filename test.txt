@@ -1,0 +1,20 @@
+--  Тест 1. По class_id (условие партиционирования)
+EXPLAIN ANALYZE
+SELECT * FROM bookings_copy WHERE class_id BETWEEN 50000 AND 70000;
+
+EXPLAIN ANALYZE
+SELECT * FROM bookings_partitioned WHERE class_id BETWEEN 50000 AND 70000;
+
+--  Тест 2. По client_id (другое поле)
+EXPLAIN ANALYZE
+SELECT * FROM bookings_copy WHERE client_id = 15000;
+
+EXPLAIN ANALYZE
+SELECT * FROM bookings_partitioned WHERE client_id = 15000;
+
+--  Тест 3. Подсчёт всех строк
+EXPLAIN ANALYZE
+SELECT COUNT(*) FROM bookings_copy;
+
+EXPLAIN ANALYZE
+SELECT COUNT(*) FROM bookings_partitioned;
