@@ -1,0 +1,44 @@
+sudo: a terminal is required to read the password; either use the -S option to read from standard input or configure an askpass helper
+sudo: a password is required
+sudo: a terminal is required to read the password; either use the -S option to read from standard input or configure an askpass helper
+sudo: a password is required
+[Sat Nov  8 15:00:01 +07 2025] Starting PostgreSQL backup...
+sudo: a terminal is required to read the password; either use the -S option to read from standard input or configure an askpass helper
+sudo: a password is required
+[Sat Nov  8 15:00:01 +07 2025] Database dump saved to /var/backups/postgresql/sport_center_2025-11-08.dump
+sudo: a terminal is required to read the password; either use the -S option to read from standard input or configure an askpass helper
+sudo: a password is required
+[Sat Nov  8 15:00:01 +07 2025] Roles and global objects dump saved to /var/backups/postgresql/roles_2025-11-08.sql
+sudo: a terminal is required to read the password; either use the -S option to read from standard input or configure an askpass helper
+sudo: a password is required
+sudo: a terminal is required to read the password; either use the -S option to read from standard input or configure an askpass helper
+sudo: a password is required
+sudo: a terminal is required to read the password; either use the -S option to read from standard input or configure an askpass helper
+sudo: a password is required
+[Sat Nov  8 15:00:01 +07 2025] Configuration files copied
+sudo: a terminal is required to read the password; either use the -S option to read from standard input or configure an askpass helper
+sudo: a password is required
+[Sat Nov  8 15:00:01 +07 2025] Old backups removed (older than 7 days)
+[Sat Nov  8 15:00:01 +07 2025] PostgreSQL backup completed successfully!
+sudo: a terminal is required to read the password; either use the -S option to read from standard input or configure an askpass helper
+sudo: a password is required
+sudo: a terminal is required to read the password; either use the -S option to read from standard input or configure an askpass helper
+sudo: a password is required
+[Sat Nov  8 16:00:01 +07 2025] Starting PostgreSQL backup...
+sudo: a terminal is required to read the password; either use the -S option to read from standard input or configure an askpass helper
+sudo: a password is required
+[Sat Nov  8 16:00:01 +07 2025] Database dump saved to /var/backups/postgresql/sport_center_2025-11-08.dump
+sudo: a terminal is required to read the password; either use the -S option to read from standard input or configure an askpass helper
+sudo: a password is required
+[Sat Nov  8 16:00:01 +07 2025] Roles and global objects dump saved to /var/backups/postgresql/roles_2025-11-08.sql
+sudo: a terminal is required to read the password; either use the -S option to read from standard input or configure an askpass helper
+sudo: a password is required
+sudo: a terminal is required to read the password; either use the -S option to read from standard input or configure an askpass helper
+sudo: a password is required
+sudo: a terminal is required to read the password; either use the -S option to read from standard input or configure an askpass helper
+sudo: a password is required
+[Sat Nov  8 16:00:01 +07 2025] Configuration files copied
+sudo: a terminal is required to read the password; either use the -S option to read from standard input or configure an askpass helper
+sudo: a password is required
+[Sat Nov  8 16:00:01 +07 2025] Old backups removed (older than 7 days)
+[Sat Nov  8 16:00:01 +07 2025] PostgreSQL backup completed successfully!

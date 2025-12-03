@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  pg_main:
+    image: postgres:16
+    container_name: pg_main
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: sport_center
+    ports:
+      - "5440:5432"
+    volumes:
+      - ./init/main:/docker-entrypoint-initdb.d
+
+  pg_sub:
+    image: postgres:16
+    container_name: pg_sub
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5441:5432"
+    volumes:
+      - sub_data:/var/lib/postgresql/data
+    command: "sleep infinity"
+
+  postgres_exporter:
+    image: prometheuscommunity/postgres-exporter
+    container_name: postgres_exporter
+    environment:
+      DATA_SOURCE_NAME: "postgresql://postgres:postgres@pg_main:5432/sport_center?sslmode=disable"
+    depends_on:
+      - pg_main
+    ports:
+      - "9187:9187"
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    depends_on:
+      - postgres_exporter
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    depends_on:
+      - prometheus
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+
+volumes:
+  sub_data:
