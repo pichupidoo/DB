@@ -1,2 +1,4 @@
-/dockerdb/commands.txt
-/dockerdb/backups
+/dockerdb/postgres/commands.txt
+/dockerdb/mongo/commands.txt
+/dockerdb/postgres/backups
+/dockerdb/mongo/*.json
