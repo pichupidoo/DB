@@ -1,4 +1,6 @@
 /dockerdb/postgres/commands.txt
-/dockerdb/mongo/commands.txt
+/dockerdb/mongo/comands.txt
 /dockerdb/postgres/backups
 /dockerdb/mongo/*.json
+/dockerdb/mongo/seeds/*.json
+/dockerdb/mongo/node_modules
