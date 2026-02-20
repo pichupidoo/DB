@@ -155,6 +155,4 @@ reportsCollection.insertOne({
   data: workoutsWithParticipants_NN
 });
 
-print("\n============================================");
-print("✅ All pipelines executed and reports saved!");
-print("============================================\n");
+print("✅");

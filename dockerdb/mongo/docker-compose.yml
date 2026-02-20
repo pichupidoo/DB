@@ -1,6 +1,10 @@
 services:
+  # ----------------------------
+  # Твой основной mongodb
+  # ----------------------------
   mongodb:
     image: mongo
+    command: ["mongod", "--replSet", "rs0", "--bind_ip_all"]
     ports:
       - "27017:27017"
     volumes:    
@@ -9,5 +13,62 @@ services:
       - ./operations:/operations:ro
       - ./seeds:/seeds:ro
 
+  # ----------------------------
+  # Конфигурационный сервер
+  # ----------------------------
+  configsvr:
+    image: mongo:6.0
+    container_name: mongo_configsvr
+    command: ["mongod", "--configsvr", "--replSet", "csrs", "--port", "27019", "--bind_ip_all"]
+    ports:
+      - "27019:27019"
+    volumes:
+      - config_data:/data/configdb
+
+  # ----------------------------
+  # Шард 1
+  # ----------------------------
+  shard1:
+    image: mongo:6.0
+    container_name: mongo_shard1
+    command: ["mongod", "--shardsvr", "--replSet", "shard1rs", "--port", "27018", "--bind_ip_all"]
+    ports:
+      - "27018:27018"
+    volumes:
+      - shard1_data:/data/db
+
+  # ----------------------------
+  # Шард 2
+  # ----------------------------
+  shard2:
+    image: mongo:6.0
+    container_name: mongo_shard2
+    command: ["mongod", "--shardsvr", "--replSet", "shard2rs", "--port", "27021", "--bind_ip_all"]
+    ports:
+      - "27021:27021"
+    volumes:
+      - shard2_data:/data/db
+
+  # ----------------------------
+  # Mongos (шардинг роутер)
+  # ----------------------------
+  mongos:
+    image: mongo:6.0
+    container_name: mongo_mongos
+    depends_on:
+      - configsvr
+      - shard1
+      - shard2
+    command: >
+      mongos --configdb csrs/configsvr:27019 --bind_ip_all --port 27020
+    ports:
+      - "27020:27020"
+    volumes:
+      - ./operations:/operations:ro
+      - ./seeds:/seeds:ro
+
 volumes:
   mongo_data:
+  config_data:
+  shard1_data:
+  shard2_data:

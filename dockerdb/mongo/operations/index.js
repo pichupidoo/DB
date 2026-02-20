@@ -114,13 +114,13 @@ print("⚙️ TTL index: logs.created_at expires after 30 days");
 db.createCollection("logs");
 logs.createIndex(
     { created_at: 1 },
-    { expireAfterSeconds: 60 * 60 * 24 * 30 }
+    { expireAfterSeconds: 60 }
 );
 
 // Unique index
 print("⚙️ Unique index: phone");
 try {
-    users.createIndex({ phone: 1 }, { unique: true });
+    users.createIndex({ phone:1 }, { unique: true });
 } catch (e) {
     print("   ⚠️ Не удалось создать unique index: возможно есть дубликаты");
 }
@@ -141,7 +141,4 @@ showResult("Query 1: Find user by phone", q1, before1, after1);
 showResult("Query 2: Workouts by hall + date range", q2, before2, after2);
 showResult("Query 3: Clients by tag 'активный'", q3, before3, after3);
 
-// -----------------------------------------------------
-print("\n============================================");
-print("✅ Все индексы созданы и бенчмарк выполнен!");
-print("============================================\n");
+print("✅");

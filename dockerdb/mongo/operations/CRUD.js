@@ -7,14 +7,62 @@ print("========================================\n");
 // Очистка тестовых данных перед запуском
 db.users.deleteMany({ _id: { $in: [9990, 9999, 9998, 8888] } });
 db.activities.deleteMany({ _id: { $in: [44000, 44001] } });
+// === ДОБАВЛЕНИЕ ТЕСТОВЫХ ДАННЫХ ДЛЯ СТАБИЛЬНОГО ВЫВОДА ===
 
+// 1. Гарантируем наличие хотя бы одного отменённого бронирования
+db.activities.deleteOne({ _id: 99999 }); // удаляем, если уже есть
+db.activities.insertOne({
+  _id: 99999,
+  type: "booking",
+  status: "отменён",
+  user_id: 1003,
+  datetime: ISODate("2025-12-01T10:00:00Z")
+});
+
+// 2. Гарантируем наличие оборудования "на ремонте" в зале 13
+const hall13 = db.facilities.findOne({ _id: 13 });
+if (!hall13) {
+  // если зала 13 нет — создаём минимальный
+  db.facilities.insertOne({
+    _id: 13,
+    name: "Тестовый зал",
+    equipment: [
+      { equipment_id: 500, status: "на ремонте" }
+    ]
+  });
+} else {
+  // если есть — проверим, есть ли оборудование "на ремонте"
+  const hasRepair = hall13.equipment && hall13.equipment.some(eq => eq.status === "на ремонте");
+  if (!hasRepair) {
+    // добавим, если нет
+    db.facilities.updateOne(
+      { _id: 13 },
+      { $push: { equipment: { equipment_id: 500, status: "на ремонте" } } }
+    );
+  }
+}
+
+// 3. Убедимся, что у клиента 1003 нет тега "активный" (чтобы $addToSet всегда работал одинаково)
+
+const client1003 = db.users.findOne({ _id: 1003 });
+if (!client1003) {
+  db.users.insertOne({
+    _id: 1003,
+    role: "client",
+    full_name: "Тестовый Клиент",
+    phone: "+70000000000",
+    reviews: []
+  });
+} else if (!client1003.reviews) {
+  db.users.updateOne({ _id: 1003 }, { $set: { reviews: [] } });
+}
 // 1. INSERT OPERATIONS
 print("\n1️⃣ INSERT OPERATIONS");
 print("---------------------");
 
 // insertOne: Новый клиент
 const newClient = {
-  _id: 9998,
+  _id: 9999,
   role: "client",
   full_name: "Сидоров Сидор",
   birth_date: "1995-08-20",
@@ -54,7 +102,10 @@ print(`   ✅ $inc: Увеличено количество участников
 
 // $push: Добавляем отзыв клиенту 1003
 if (db.users.findOne({ _id: 1003 })) {
-  db.users.updateOne({ _id: 1003 }, { $setOnInsert: { reviews: [] } });
+  db.users.updateOne(
+  { _id: 9999999, reviews: { $exists: false } },
+  { $set: { reviews: [] } }
+  );
   const pushRes = db.users.updateOne(
     { _id: 1003 },
     { 
@@ -128,7 +179,6 @@ if (client9999) {
       role: "client",
       full_name: "Петров Петр",
       phone: "+79999887766",
-      vip: true,
       updated_at: ISODate()
     }
   );
@@ -141,14 +191,17 @@ if (client9999) {
 print("\n5️⃣ UPSERT OPERATION");
 print("-------------------");
 const upsertRes = db.users.updateOne(
-  { phone: "+79998887766" },
+  { phone: "+799888766" },
   { 
     $setOnInsert: {
-      _id: 8888,
+      _id: 48884899,
       role: "client",
       full_name: "Новый Клиент",
       subscription_id: 1,
       created_at: ISODate()
+    },
+    $set: {  
+      last_seen: ISODate()
     }
   },
   { upsert: true }
@@ -179,7 +232,7 @@ if (count > 0) {
 }
 
 // Запрос клиентов
-print("\n   🔍 Запрос: Клиенты с подписками 1 или 2 (исключая ID 1001-1005)");
+print("\n   🔍 Запрос: Клиенты с подписками 1 или 2 ");
 const inQuery = db.users.find({
   subscription_id: { $in: [1, 2] },
   _id: { $nin: [1001, 1002, 1003, 1004, 1005] },
@@ -192,6 +245,4 @@ if (inCount > 0) {
   inQuery.forEach(doc => printjson(doc));
 }
 
-
-print("\n========================================");
-print("✅ Все операции выполнены!");
+print("✅");

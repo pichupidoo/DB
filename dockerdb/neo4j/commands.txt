@@ -1,0 +1,44 @@
+create nodes
+
+// Клиенты
+MERGE (c1:Client {id: 1, name: "Иван Иванов", gender: "м"})
+MERGE (c2:Client {id: 2, name: "Мария Петрова", gender: "ж"})
+MERGE (c3:Client {id: 3, name: "Алексей Смирнов", gender: "м"});
+
+// Персонал
+MERGE (s1:Staff {id: 1, name: "Олег Тренер", position: "тренер"})
+MERGE (s2:Staff {id: 2, name: "Анна Инструктор", position: "инструктор"});
+
+// Залы
+MERGE (h1:Hall {id: 1, name: "Зал A"})
+MERGE (h2:Hall {id: 2, name: "Зал B"});
+
+// Занятия
+MERGE (w1:Workout {id: 1, datetime: datetime("2026-02-01T10:00")})
+MERGE (w2:Workout {id: 2, datetime: datetime("2026-02-02T18:00")});
+
+create links
+
+// Клиенты записались на занятия
+MATCH (c:Client {id:1}), (w:Workout {id:1})
+MERGE (c)-[:BOOKED {status:"посетил"}]->(w);
+
+MATCH (c:Client {id:2}), (w:Workout {id:1})
+MERGE (c)-[:BOOKED {status:"записан"}]->(w);
+
+MATCH (c:Client {id:3}), (w:Workout {id:2})
+MERGE (c)-[:BOOKED {status:"отменил"}]->(w);
+
+// Тренеры ведут занятия
+MATCH (s:Staff {id:1}), (w:Workout {id:1})
+MERGE (s)-[:LEADS]->(w);
+
+MATCH (s:Staff {id:2}), (w:Workout {id:2})
+MERGE (s)-[:LEADS]->(w);
+
+// Где проходят занятия
+MATCH (w:Workout {id:1}), (h:Hall {id:1})
+MERGE (w)-[:HELD_IN]->(h);
+
+MATCH (w:Workout {id:2}), (h:Hall {id:2})
+MERGE (w)-[:HELD_IN]->(h);

@@ -5,7 +5,7 @@ from datetime import datetime, timedelta, timezone
 from typing import Generator, Dict, Any
 
 # --- КОНФИГУРАЦИЯ (ваши параметры + расширения) ---
-NUM_CLIENTS = 280000      # Клиенты (было 280)
+NUM_CLIENTS = 2800000      # Клиенты (было 280)
 NUM_STAFF = 200           # Сотрудники (было 20)
 NUM_WORKOUTS = 100    # Тренировки (было 120)
 NUM_BOOKINGS = 100000     # Бронирования (было 50)
@@ -440,15 +440,15 @@ if __name__ == "__main__":
     
     # 2. Залы и оборудование
     print("\n🏋️ Генерация залов и оборудования...")
-    save_json_array(generate_facilities(), 'facilities.seed.json')
+  #  save_json_array(generate_facilities(), 'facilities.seed.json')
     
     # 3. Активности
     print("\n🏃 Генерация активностей (тренировки, бронирования, услуги, отзывы)...")
-    save_json_array(generate_activities(), 'activities.seed.json')
+   # save_json_array(generate_activities(), 'activities.seed.json')
     
     # 4. Финансы
-    print("\n💰 Генерация финансовых операций...")
-    save_json_array(generate_finance(), 'finance.seed.json')
+    #print("\n💰 Генерация финансовых операций...")
+    #save_json_array(generate_finance(), 'finance.seed.json')
     
     # 5. Логи сессий для TTL
     #print("\n⏳ Генерация логов сессий для TTL-индекса...")
